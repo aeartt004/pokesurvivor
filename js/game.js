@@ -16,6 +16,8 @@
  */
 G.Game = (() => {
   let cv, ctx, dpr = 1, w = 0, h = 0;
+  let glx = null;           // capa WebGL del mundo (null = todo en el canvas 2D; ver core/glctx.js)
+  let worldMs = 0;          // CPU que se lleva dibujar el mundo en el último fotograma
   let state = 'ui';
   let time = 0, last = 0, pendingLevels = 0;
   let pl = null;
@@ -29,6 +31,7 @@ G.Game = (() => {
   function init() {
     cv = document.getElementById('game');
     ctx = cv.getContext('2d');
+    if (G.GLCtx && G.GLCtx.wanted()) glx = G.GLCtx.create(cv);
     resize();
     addEventListener('resize', resize);
     G.Touch.init(cv);
@@ -36,6 +39,7 @@ G.Game = (() => {
     document.addEventListener('visibilitychange', () => { if (document.hidden) autoPause(); });
     G.RunUI.wirePause(() => { state = 'playing'; G.UI.hideAll(); }, quitRun);
     Backdrop.init();
+    if (/[?&]bench\b/.test(location.search)) setTimeout(Bench.start, 4000);
     last = performance.now();
     requestAnimationFrame(loop);
   }
@@ -602,7 +606,15 @@ G.Game = (() => {
     // La red se atiende siempre (también con las cartas de nivel abiertas).
     if (G.Coop.active && pl && state !== 'ui' && state !== 'over') G.Coop.tick(dt);
 
-    if (pl && state !== 'ui') render(); else Backdrop.render(ctx, w, h, dpr, dt);
+    try {
+      if (pl && state !== 'ui') render(); else Backdrop.render(ctx, w, h, dpr, dt);
+    } catch (e) {
+      if (!glx) throw e;
+      // Contexto perdido, imagen sin permiso (file://)...: el mundo vuelve al canvas 2D.
+      console.warn('[WebGL] fallo al dibujar, se vuelve al canvas 2D:', e);
+      glx.destroy(); glx = null;
+    }
+    Bench.tick(real, worldMs);
     G.UI.tick(dt);
 
     G.Input.endFrame();
@@ -696,7 +708,7 @@ G.Game = (() => {
 
   // ---------------- dibujo ----------------
 
-  function drawScene(cam, extra) {
+  function drawScene(ctx, cam, extra) {
     const t = performance.now() / 1000;
     G.World.drawGround(ctx, cam);
     G.World.drawLiquid(ctx, cam, t);
@@ -727,15 +739,21 @@ G.Game = (() => {
     ctx.clearRect(0, 0, w, h);
     ctx.imageSmoothingEnabled = false;
 
-    ctx.save();
-    ctx.scale(G.Camera.scale, G.Camera.scale);
-    G.Camera.apply(ctx);
-    drawScene(G.Camera, G.Coop.active ? [pl, ...G.Coop.puppets()] : [pl]);
-    G.Projectiles.draw(ctx);
-    G.Combat.drawAirFields(ctx);
-    G.FX.draw(ctx);
-    G.Judgment.drawAir(ctx);
-    ctx.restore();
+    // El mundo: en la capa WebGL si la hay. Lo de después (clima, HUD...) sigue en el 2D, encima.
+    const t0 = performance.now();
+    const wc = glx || ctx;
+    if (glx) { glx.begin(w, h, dpr); glx.setTransform(dpr, 0, 0, dpr, 0, 0); }
+    wc.save();
+    wc.scale(G.Camera.scale, G.Camera.scale);
+    G.Camera.apply(wc);
+    drawScene(wc, G.Camera, G.Coop.active ? [pl, ...G.Coop.puppets()] : [pl]);
+    G.Projectiles.draw(wc);
+    G.Combat.drawAirFields(wc);
+    G.FX.draw(wc);
+    G.Judgment.drawAir(wc);
+    wc.restore();
+    if (glx) glx.end();
+    worldMs = performance.now() - t0;
 
     G.Weather.draw(ctx, w, h, frameDt);
     G.World.drawVignette(ctx, w, h);
@@ -768,6 +786,171 @@ G.Game = (() => {
       ctx.restore();
     }
   }
+
+  /** Cambia cómo se dibuja el mundo: 'webgl' o 'canvas'. Devuelve el que queda puesto. */
+  function setRenderer(kind) {
+    const gl = kind !== 'canvas';
+    if (gl && !glx && G.GLCtx) glx = G.GLCtx.create(cv);
+    else if (!gl && glx) { glx.destroy(); glx = null; }
+    return glx ? 'webgl' : 'canvas';
+  }
+
+  // ---------------- prueba de rendimiento (canvas 2D vs WebGL) ----------------
+
+  /**
+   * Carga artificial en el mundo del menú (muchos Pokémon andando, ataques
+   * volando, partículas, anillos y números) y mide los fotogramas con cada
+   * forma de dibujar el mundo. La interfaz es la misma en las dos.
+   *   dev.html?bench   -> empieza sola a los 4 s
+   *   G.Game.bench()   -> desde la consola, en el menú
+   */
+  const Bench = (() => {
+    const DEX = [1, 4, 7, 25, 133, 52, 39, 35, 16, 43, 60, 69, 74, 92, 129, 147, 113, 143, 54, 79];
+    const TYPES = ['fire', 'water', 'grass', 'electric', 'ice', 'psychic', 'ghost', 'dragon', 'poison', 'rock', 'fighting', 'fairy'];
+    const COLS = ['#ff7a3d', '#4aa3ff', '#5fe08a', '#ffd23f', '#9fe8ff', '#ff6fb5', '#a07aff'];
+    const SCENES = [
+      { name: '150 Pokémon + 200 ataques', mons: 150, shots: 200, fx: 60 },
+      { name: '600 Pokémon + 800 ataques', mons: 600, shots: 800, fx: 140 },
+      { name: '1500 Pokémon + 2000 ataques', mons: 1500, shots: 2000, fx: 240 },
+    ];
+    const WARM = 1.5, MEASURE = 5;          // segundos
+    let on = false, extra = [], shots = [], fxRate = 0, fxAcc = 0;
+    let queue = null, cur = null, phaseT = 0, frames = [], worlds = [], results = [], box = null, back = 'webgl';
+
+    const rx = () => G.Camera.x + G.U.rand(-0.5, 0.5) * G.Camera.w;
+    const ry = () => G.Camera.y + G.U.rand(-0.5, 0.5) * G.Camera.h;
+
+    function mon(dex) {
+      const anim = new G.Sprites.Animator(dex, 1);
+      const a = Math.random() * 6.2832, s = G.U.rand(20, 50);
+      anim.dir = G.Sprites.dirFromAngle(a);
+      anim.loop('Walk');
+      return { dex, anim, x: rx(), y: ry(), vx: Math.cos(a) * s, vy: Math.sin(a) * s, draw(ctx) {
+        G.Sprites.drawShadow(ctx, this.dex, this.x, this.y);
+        this.anim.draw(ctx, this.x, this.y);
+      } };
+    }
+
+    function shot() {
+      const v = G.VFX.forType(G.U.pick(TYPES));
+      const a = Math.random() * 6.2832, s = G.U.rand(80, 180);
+      return { shape: v.proj, pal: v.pal, x: rx(), y: ry(), vx: Math.cos(a) * s, vy: Math.sin(a) * s, t: Math.random() * 10 };
+    }
+
+    /** Lo que sale por un lado de la cámara entra por el otro: la carga no baja. */
+    function wrap(o) {
+      const W = G.Camera.w + 80, H = G.Camera.h + 80;
+      const L = G.Camera.x - W / 2, T = G.Camera.y - H / 2;
+      if (o.x < L) o.x += W; else if (o.x > L + W) o.x -= W;
+      if (o.y < T) o.y += H; else if (o.y > T + H) o.y -= H;
+    }
+
+    function load(sc) {
+      extra = []; shots = [];
+      G.FX.clear();
+      if (!sc) { on = false; return; }
+      for (let i = 0; i < sc.mons; i++) extra.push(mon(DEX[i % DEX.length]));
+      for (let i = 0; i < sc.shots; i++) shots.push(shot());
+      fxRate = sc.fx; fxAcc = 0; on = true;
+    }
+
+    function step(dt) {
+      for (const m of extra) { m.x += m.vx * dt; m.y += m.vy * dt; wrap(m); m.anim.update(dt); }
+      for (const p of shots) { p.x += p.vx * dt; p.y += p.vy * dt; p.t += dt; wrap(p); }
+      fxAcc += fxRate * dt;                 // golpes por segundo
+      while (fxAcc >= 1) {
+        fxAcc--;
+        const x = rx(), y = ry(), c = G.U.pick(COLS);
+        G.FX.burst(x, y, c, 10, 140);
+        G.FX.ring(x, y, 6, 40, c, 0.4, 3);
+        G.FX.dmgText(x, y - 10, String(10 + (Math.random() * 990 | 0)), '#ffffff', Math.random() < 0.15);
+      }
+      G.FX.update(dt);
+    }
+
+    function drawAir(ctx) {
+      for (const p of shots) {
+        const angle = G.VFX.isDir(p.shape) ? Math.atan2(p.vy, p.vx) : G.VFX.spins(p.shape) ? p.t * 8 : 0;
+        G.VFX.draw(ctx, p.shape, p.pal, p.x, p.y, { angle, frame: Math.floor(p.t * 10) % G.VFX.frames(p.shape) });
+      }
+      G.FX.draw(ctx);
+    }
+
+    function show(text) {
+      if (!box) {
+        box = document.createElement('div');
+        box.setAttribute('translate', 'no');      // herramienta de desarrollo: i18n no la toca
+        box.style.cssText = 'position:fixed;left:12px;top:12px;z-index:300;max-width:calc(100% - 24px);padding:10px 12px;' +
+          'background:rgba(10,14,24,.92);color:#e8eefc;font:12px/1.45 monospace;border:1px solid #3a4a70;border-radius:8px;' +
+          'white-space:pre;overflow:auto;cursor:pointer;user-select:text';
+        box.title = 'Clic para cerrar (al acabar)';
+        box.onclick = () => { if (!queue && box) { box.remove(); box = null; } };
+        document.body.appendChild(box);
+      }
+      box.textContent = text;
+    }
+
+    function start() {
+      if (queue) return;
+      if (state !== 'ui') { console.warn('[Bench] sólo desde el menú'); return; }
+      back = glx ? 'webgl' : 'canvas';
+      results = []; queue = [];
+      for (const sc of SCENES) for (const r of ['canvas', 'webgl']) queue.push({ sc, r });
+      next();
+    }
+
+    function next() {
+      cur = queue.shift();
+      if (!cur) { finish(); return; }
+      cur.got = setRenderer(cur.r);
+      load(cur.sc);
+      phaseT = 0; frames = []; worlds = []; cur.draws = 0;
+      show(`Prueba de rendimiento (${results.length + 1}/6)\n${cur.sc.name}\nmundo con: ${cur.got}`);
+    }
+
+    function tick(real, wms) {
+      if (!queue || !cur) return;
+      if (state !== 'ui') { queue = null; cur = null; load(null); setRenderer(back); show('Prueba cancelada (se salió del menú)'); return; }
+      phaseT += real;
+      if (phaseT < WARM) return;
+      frames.push(real * 1000); worlds.push(wms);
+      if (glx) cur.draws = Math.max(cur.draws, glx.stats.draws);
+      if (phaseT >= WARM + MEASURE) { results.push(summary()); next(); }
+    }
+
+    function summary() {
+      const n = frames.length, sum = frames.reduce((a, b) => a + b, 0), ws = worlds.reduce((a, b) => a + b, 0);
+      const sorted = frames.slice().sort((a, b) => a - b);
+      return {
+        scene: cur.sc.name, renderer: cur.got,
+        fps: +(1000 * n / sum).toFixed(1),
+        frameAvgMs: +(sum / n).toFixed(2),
+        frameP95Ms: +sorted[Math.min(n - 1, Math.floor(n * 0.95))].toFixed(2),
+        worldCpuMs: +(ws / n).toFixed(2),
+        drawCalls: cur.got === 'webgl' ? cur.draws : '-',
+      };
+    }
+
+    function finish() {
+      queue = null; cur = null;
+      load(null);
+      setRenderer(back);
+      console.table(results);
+      const pad = (s, k) => String(s).padEnd(k);
+      const lines = ['Prueba de rendimiento — mundo: canvas 2D vs WebGL', `${innerWidth}×${innerHeight} css px · dpr ${dpr}`, '',
+        pad('escena', 30) + pad('mundo', 8) + pad('FPS', 8) + pad('ms/fot', 9) + pad('p95 ms', 9) + pad('CPU mundo', 11) + 'draws'];
+      for (const r of results) {
+        lines.push(pad(r.scene, 30) + pad(r.renderer, 8) + pad(r.fps, 8) + pad(r.frameAvgMs, 9) + pad(r.frameP95Ms, 9) + pad(r.worldCpuMs, 11) + r.drawCalls);
+      }
+      lines.push('', 'FPS tope = refresco de la pantalla (vsync). "CPU mundo" = ms de JS dibujando el mundo.', 'Clic para cerrar.');
+      show(lines.join('\n'));
+    }
+
+    return {
+      start, step, drawAir, tick,
+      get on() { return on; }, get extra() { return extra; }, get results() { return results; },
+    };
+  })();
 
   // ---------------- fondo de los menús ----------------
 
@@ -841,13 +1024,21 @@ G.Game = (() => {
     function render(ctx, w, h, dpr, dt) {
       if (!ready) return;
       step(dt);
+      if (Bench.on) Bench.step(dt);
       ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
       ctx.imageSmoothingEnabled = false;
-      ctx.save();
-      ctx.scale(G.Camera.scale, G.Camera.scale);
-      G.Camera.apply(ctx);
-      drawScene(G.Camera, wanderers);
-      ctx.restore();
+      const t0 = performance.now();
+      const wc = glx || ctx;
+      // Con WebGL el 2D sólo lleva la viñeta: hay que borrarlo (el suelo ya no lo tapa).
+      if (glx) { ctx.clearRect(0, 0, w, h); glx.begin(w, h, dpr); glx.setTransform(dpr, 0, 0, dpr, 0, 0); }
+      wc.save();
+      wc.scale(G.Camera.scale, G.Camera.scale);
+      G.Camera.apply(wc);
+      drawScene(wc, G.Camera, Bench.on ? wanderers.concat(Bench.extra) : wanderers);
+      if (Bench.on) Bench.drawAir(wc);
+      wc.restore();
+      if (glx) glx.end();
+      worldMs = performance.now() - t0;
       G.World.drawVignette(ctx, w, h);
     }
 
@@ -874,6 +1065,13 @@ G.Game = (() => {
     /** Para grabar vídeos: abre las cartas de subir de nivel. */
     debugLevelUp() { tampered = true; pl.level++; pendingLevels++; },
     toUI() { state = 'ui'; Backdrop.restore(); },
+    /** 'webgl' | 'canvas': cambia cómo se dibuja el mundo (devuelve el que queda). */
+    setRenderer,
+    get renderer() { return glx ? 'webgl' : 'canvas'; },
+    /** Prueba de rendimiento canvas 2D vs WebGL (desde el menú). También con dev.html?bench */
+    bench() { Bench.start(); },
+    get benchResults() { return Bench.results; },
+    get worldMs() { return worldMs; },
     get state() { return state; }, get player() { return pl; }, st
   };
 })();
