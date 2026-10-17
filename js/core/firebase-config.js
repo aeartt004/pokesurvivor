@@ -8,33 +8,16 @@
  *
  * Si se pone a null, el juego funciona en modo local (sólo en el navegador).
  */
-// Esta copia va en MODO LOCAL: la configuración de abajo es la del proyecto del
-// autor original (pokesurvivor-free) y no se debe usar aquí (las partidas, el
-// ranking y el cooperativo irían a su base de datos). Para tener nube propia,
-// crea tu proyecto de Firebase (docs/FIREBASE.md) y pon aquí SU configuración.
-// Con nube activa, el menú de trucos (js/ui/cheats-ui.js) no se abre.
-G.FIREBASE_CONFIG = null;
-
-/* Configuración original (proyecto pokesurvivor-free del autor, desde el 12-10-2026;
- * autenticación normal de Firebase, SIN Identity Platform):
+// VERSIÓN NO OFICIAL (fork de aeartt004): proyecto de Firebase PROPIO,
+// pokesurvivor-aeartt, separado del oficial. Las cuentas, partidas, ranking y
+// cooperativo de esta versión NO se mezclan con los de pokesurvivor.com.
+// No poner aquí nunca la configuración del proyecto del autor original.
 G.FIREBASE_CONFIG = {
-  apiKey: 'AIzaSyB1LpJcsnT7gj7c8cpRMGjhswLPr8-dnBw',
-  authDomain: 'pokesurvivor-free.firebaseapp.com',
-  projectId: 'pokesurvivor-free',
-  storageBucket: 'pokesurvivor-free.firebasestorage.app',
-  messagingSenderId: '798271504277',
-  appId: '1:798271504277:web:dcac4409f969239e87009c',
-  databaseURL: 'https://pokesurvivor-free-default-rtdb.europe-west1.firebasedatabase.app'
+  apiKey: 'AIzaSyCoy3S9nmWsaf7KkaU6hlsBemdV42lruDc',
+  authDomain: 'pokesurvivor-aeartt.firebaseapp.com',
+  projectId: 'pokesurvivor-aeartt',
+  storageBucket: 'pokesurvivor-aeartt.firebasestorage.app',
+  messagingSenderId: '659935904455',
+  appId: '1:659935904455:web:f11a158ddba88328d5b4e2',
+  databaseURL: 'https://pokesurvivor-aeartt-default-rtdb.asia-southeast1.firebasedatabase.app'
 };
-*/
-
-/* Ejemplo de cómo debe quedar:
-G.FIREBASE_CONFIG = {
-  apiKey: 'AIza...',
-  authDomain: 'tu-proyecto.firebaseapp.com',
-  projectId: 'tu-proyecto',
-  storageBucket: 'tu-proyecto.firebasestorage.app',
-  messagingSenderId: '1234567890',
-  appId: '1:1234567890:web:abc123'
-};
-*/

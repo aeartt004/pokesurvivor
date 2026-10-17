@@ -30,7 +30,10 @@ G.DB = (() => {
   const VERSION = 3;
   const START_COINS = 500;
   const SDK = 'https://www.gstatic.com/firebasejs/13.0.0/';
-  const NAME_DOMAIN = 'jugadores.pokesurvivor.net';   // sólo para el email interno
+  // Sólo para el email interno de las cuentas de nombre y contraseña (nunca se
+  // envía nada). Versión no oficial: dominio del proyecto propio, no el del
+  // juego oficial (jugadores.pokesurvivor.net).
+  const NAME_DOMAIN = 'jugadores.pokesurvivor-aeartt.firebaseapp.com';
 
   let mode = 'local';       // 'cloud' | 'local'
   let localReason = '';     // por qué no hay nube: 'file' | 'config' | 'host' | 'error'
@@ -258,6 +261,8 @@ G.DB = (() => {
       for (const k in older.pupg[d]) mine[k] = Math.max(mine[k] || 0, older.pupg[d][k]);
     }
     r.pupgDone = r.pupgDone || older.pupgDone;
+    // Marca de trucos (js/ui/cheats-ui.js): una vez usados, para siempre.
+    if (older.cheated && !r.cheated) r.cheated = older.cheated;
     // Lo conseguido nunca se pierde: unión de legendarios, arenas, objetos, logros...
     for (const coll of ['legends', 'arenas', 'itemsFound', 'evoMoves', 'ach']) {
       r[coll] = r[coll] || {};
@@ -415,14 +420,14 @@ G.DB = (() => {
   }
 
   /*
-   * La nube (Firebase) sólo desde la web oficial: el
-   * código está en GitHub, y una copia publicada en otra web sin cambiar
-   * firebase-config.js guardaría sus cuentas y partidas en NUESTRO proyecto
-   * (y lo pagaríamos nosotros). Ahí el juego va en modo local. Lo que lo
-   * cierra de verdad es la clave de la API restringida a estos dominios en
-   * Google Cloud; esto frena las copias que ni lo miran (14-10-2026).
+   * La nube (Firebase) sólo desde las webs de ESTA versión: una copia
+   * publicada en otra web sin cambiar firebase-config.js guardaría sus cuentas
+   * y partidas en este proyecto. Ahí el juego va en modo local.
+   * Versión no oficial (fork de aeartt004): sólo su GitHub Pages y localhost;
+   * los dominios del juego oficial (pokesurvivor.com, jpter78.github.io) no
+   * están, para que esta versión nunca se haga pasar por la oficial.
    */
-  const HOSTS = ['pokesurvivor.com', 'www.pokesurvivor.com', 'jpter78.github.io', 'localhost', '127.0.0.1'];
+  const HOSTS = ['aeartt004.github.io', 'localhost', '127.0.0.1'];
 
   async function initCloud() {
     const cfg = G.FIREBASE_CONFIG;
