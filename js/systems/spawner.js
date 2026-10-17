@@ -180,5 +180,12 @@ G.Spawner = (() => {
   function tickBanner(dt) { if (announceT > 0) announceT -= dt; }
 
   return { reset, update, ahead, burst, tickBanner, banner, say, rate, SHINY_RATE, CAP,
-           debugForceShiny(n = 1) { forceShiny = n; } };
+           debugForceShiny(n = 1) { forceShiny = n; },
+           /** Para pruebas (menú de trucos): el próximo jefe de la run, ya. */
+           debugBoss() {
+             const pl = G.Game.player, list = G.Enemies.BOSSES || [];
+             if (!pl || !list.length) return null;
+             if (!players.length) players = [pl];
+             return spawnBoss(anchor(), G.Game.st.time, list[Math.min(bossIdx, list.length - 1)]);
+           } };
 })();

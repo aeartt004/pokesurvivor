@@ -227,6 +227,7 @@ G.Player = class Player {
    */
   hurt(amount, type = null, pure = false) {
     if (this.invuln > 0 || this.dead) return;
+    if (G.Cheats && G.Cheats.god && this === G.Game.player) return;     // truco: invencible
     let eff = null;
     if (type) {
       const k = G.Types.mult(type, this.mon.types);

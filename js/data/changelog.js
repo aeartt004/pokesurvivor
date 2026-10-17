@@ -7,6 +7,11 @@
  * como tercer texto; si no está, en chino se enseña la inglesa).
  */
 G.CHANGELOG = [
+  { d: '2026-10-18', title: ['Menú de trucos para pruebas', 'Cheat menu for testing', '測試用金手指選單'], new: [
+    ['Menú de trucos (sólo en modo local, sin nube): ábrelo con F8 o en Ajustes > Trucos (también en el móvil, desde la pausa). Da monedas y tickets, desbloquea Pokémon y shinies, completa misiones y logros, y en la partida: invencible, curar, subir de nivel, jefes, grietas, saltar tiempo y velocidad. Las partidas con trucos no suben al ranking.',
+     'Cheat menu (local mode only, no cloud): open it with F8 or in Settings > Cheats (also on mobile, from the pause menu). Gives coins and tickets, unlocks Pokémon and shinies, completes missions and achievements, and in a run: invincibility, heal, level up, bosses, rifts, skip time and speed. Runs with cheats are not sent to the leaderboard.',
+     '金手指選單（僅限本機模式，不連線雲端）：按 F8 或從「設定 > 金手指」開啟（手機也可以從暫停畫面進入）。可以增加寶可幣與扭蛋券、解鎖寶可夢與異色、完成任務與成就；遊戲中還能無敵、回復、升級、召喚頭目、打開裂縫、快轉時間和調整速度。使用金手指的對局不會上傳排行榜。']
+  ] },
   { d: '2026-10-18', title: ['Nuevo idioma: chino tradicional', 'New language: Traditional Chinese', '新語言：繁體中文'], new: [
     ['El juego ya se puede jugar en chino tradicional (繁體中文): elígelo en Ajustes > Idioma. Tipos, movimientos, objetos, regiones y los 966 Pokémon usan sus nombres oficiales, con una fuente pixelada china (Cubic 11).',
      'The game can now be played in Traditional Chinese (繁體中文): pick it in Settings > Language. Types, moves, items, regions and all 966 Pokémon use their official names, with a Chinese pixel font (Cubic 11).',

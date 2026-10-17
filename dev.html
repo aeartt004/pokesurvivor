@@ -242,7 +242,7 @@
 <!-- ====== Ajustes ====== -->
 <section id="scr-settings" class="scr dim hidden">
   <div class="box settings">
-    <div class="row between"><h2>Ajustes</h2><button class="btn small ghost" id="set-close">Cerrar</button></div>
+    <div class="row between"><h2>Ajustes</h2><div class="row" style="gap:6px"><button class="btn small ghost" id="set-cheats" title="Trucos (F8)">Trucos</button><button class="btn small ghost" id="set-close">Cerrar</button></div></div>
     <div class="tabs" id="set-tabs">
       <button class="gen-tab" data-t="sound">Sonido</button>
       <button class="gen-tab" data-t="gfx">Gráficos</button>
@@ -251,6 +251,14 @@
       <button class="gen-tab" data-t="about">Acerca de</button>
     </div>
     <div id="set-body" class="set-body"></div>
+  </div>
+</section>
+
+<!-- Trucos para pruebas (js/ui/cheats-ui.js): F8 o Ajustes > Trucos; sólo en modo local -->
+<section id="scr-cheats" class="scr dim hidden">
+  <div class="box settings">
+    <div class="row between"><h2>Trucos</h2><button class="btn small ghost" id="cht-close">Cerrar</button></div>
+    <div id="cht-body" class="set-body"></div>
   </div>
 </section>
 
@@ -636,6 +644,7 @@
 <script defer src="js/ui/mod-ui.js"></script>
 <script defer src="js/ui/goals-ui.js"></script>
 <script defer src="js/ui/settings-ui.js"></script>
+<script defer src="js/ui/cheats-ui.js"></script>
 <script defer src="js/ui/layout-ui.js"></script>
 <script defer src="js/ui/support-ui.js"></script>
 <script defer src="js/ui/news-ui.js"></script>

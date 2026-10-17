@@ -677,6 +677,14 @@ body.touch kbd, body.touch .card .key, body.touch .kbd-hint { display: none !imp
 
 /* ---------- ajustes ---------- */
 #scr-settings { z-index: 60; }
+/* Trucos (cheats-ui.js): por encima de Ajustes y de la pausa */
+#scr-cheats { z-index: 70; }
+.cht-row { flex-wrap: wrap; }
+.cht-btns { display: flex; flex-wrap: wrap; gap: 6px; justify-content: flex-end; align-items: center; }
+.cht-field { width: 110px; padding: 6px 8px; font-size: 15px; }
+.cht-field.wide { width: 170px; }
+.cht-bal { margin: 0 0 4px; font-size: 16px; }
+.cht-note { margin-top: 10px; }
 /* Colocar los botones (layout-ui.js): por delante de Ajustes */
 #scr-layout { z-index: 66; display: block; background: radial-gradient(circle at 50% 40%, #24452c, #0d1a12); touch-action: none; }
 #scr-layout.hidden { display: none; }
@@ -731,7 +739,7 @@ a.btn { text-decoration: none; display: inline-block; color: var(--ink); }
   .scr { padding: 50px 10px 6px; }
   /* Sin barra superior encima: no hace falta dejarle hueco. */
   #scr-login, #scr-test, #scr-result, #scr-starters, #scr-nick, #scr-levelup, #scr-pause,
-  #scr-over, #scr-item, #scr-settings, #scr-legal, #scr-profile { padding: 6px 10px; }
+  #scr-over, #scr-item, #scr-settings, #scr-cheats, #scr-legal, #scr-profile { padding: 6px 10px; }
   .split { grid-template-columns: 1fr; }
   .logo .t1 { font-size: 30px; }
   .box { padding: 10px 14px; border-radius: 10px; }
