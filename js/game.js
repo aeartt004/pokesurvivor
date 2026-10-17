@@ -350,7 +350,7 @@ G.Game = (() => {
    */
   let runReal = 0, tampered = false;
   function clean() {
-    if (tampered || (G.Cheats && G.Cheats.god)) return false;
+    if (tampered || (G.Cheats && G.Cheats.god) || (G.DB.save && G.DB.save.cheated)) return false;
     if (time > (performance.now() - runReal) / 1000 + 10) return false;
     for (const k of ['hurt', 'update', 'heal', 'gainXp']) if (Object.prototype.hasOwnProperty.call(pl, k)) return false;
     if (!isFinite(pl.hp) || !isFinite(pl.maxHp) || pl.hp > pl.maxHp + 1 || pl.maxHp > 50000) return false;

@@ -259,10 +259,13 @@ G.Ranking = (() => {
     G.UI.toast('¡Nueva mejor marca ' + names[best] + ' en el ranking!', 3400);
   }
 
+  // Cuenta que ha usado trucos (js/ui/cheats-ui.js): nunca sube marcas.
+  const cheated = () => !!(G.DB.save && G.DB.save.cheated);
+
   function submitSolo(r) { return track(submitSoloNow(r)); }
   async function submitSoloNow(r) {
     const fb = fbx();
-    if (!fb || !G.Social.me || r.t < MIN_T) return [];
+    if (!fb || !G.Social.me || r.t < MIN_T || cheated()) return [];
     const ids = boardIds();
     const entry = { t: r.t, uids: [fb.uid], names: [G.Social.me.name], dex: [r.dex], shiny: [!!r.shiny], lv: r.lv, kills: r.kills };
     const boards = PERIODS.map(([p]) => ['s_' + ids[p], p]);
@@ -276,7 +279,7 @@ G.Ranking = (() => {
   function submitGroup(r) { return track(submitGroupNow(r)); }
   async function submitGroupNow(r) {
     const fb = fbx();
-    if (!fb || r.t < MIN_T || !r.members || r.members.length < 2) return [];
+    if (!fb || r.t < MIN_T || !r.members || r.members.length < 2 || cheated()) return [];
     const ms = r.members.slice().sort((a, b) => (a.uid < b.uid ? -1 : 1));
     const id = ms.map(m => m.uid).join('_');
     const entry = { t: r.t, uids: ms.map(m => m.uid), names: ms.map(m => m.name), dex: ms.map(m => m.dex),

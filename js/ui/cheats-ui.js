@@ -1,25 +1,54 @@
 /* ============ cheats-ui.js — menú de trucos para probar el juego ============
  * Se abre con F8 (PC) o con el botón "Trucos" de Ajustes (también en móvil,
- * desde la pausa > Ajustes). Sólo funciona en MODO LOCAL: si la partida está
- * en la nube (Firebase) o en cooperativo, no se abre, para no subir datos
- * trucados a ningún servidor.
+ * desde la pausa > Ajustes).
+ *   - Modo local o invitado: para cualquiera.
+ *   - Con la nube (Firebase): SÓLO la cuenta de administrador (CHEAT_ADMINS,
+ *     por su correo verificado de Google). Para el resto no se abre.
+ *   - En cooperativo, nunca.
  *
  * Todo pasa por las funciones normales del juego (G.DB.commit, G.DB.grant,
  * G.Progress, G.Game.debug*...), no se toca localStorage a mano.
- * Las partidas con trucos de partida no cuentan para el ranking (G.Game.clean).
+ * Ranking: la partida con trucos de partida no sube (G.Game.clean), y al usar
+ * cualquier truco la cuenta queda marcada (save.cheated) y ya nunca sube marcas.
  */
 G.Cheats = (() => {
+  // Cuentas (correo de Google verificado) que pueden usar los trucos con la nube activa.
+  const CHEAT_ADMINS = ['aeartt004@gmail.com'];
+
   const $ = G.UI.$;
   const esc = s => String(s).replace(/[&<>"']/g, c => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[c]));
   let god = false;
   let resumeOnClose = false;     // se abrió con F8 en plena partida: al cerrar, sigue
 
+  /** ¿La sesión de Firebase es de una cuenta de administrador? */
+  function isAdmin() {
+    const fb = G.DB.fb;
+    const u = fb && fb.auth && fb.auth.currentUser;
+    if (!u) return false;
+    const ok = e => !!e && CHEAT_ADMINS.includes(String(e).toLowerCase());
+    return (u.emailVerified && ok(u.email))
+      || (u.providerData || []).some(p => p && p.providerId === 'google.com' && ok(p.email));
+  }
+
+  /** ¿Se pueden usar los trucos con la partida actual? */
+  function allowed() {
+    if (G.Coop && G.Coop.active) return false;
+    if (G.DB.mode === 'cloud' && !G.DB.guest) return isAdmin();
+    return true;
+  }
+
   /** Por qué no se puede usar ahora (o '' si se puede). */
   function blockedReason() {
-    if (G.DB.mode === 'cloud' || G.DB.online) return 'Los trucos sólo funcionan en modo local (sin Firebase).';
     if (G.Coop && G.Coop.active) return 'Los trucos no funcionan en cooperativo.';
     if (!G.DB.save) return 'Inicia sesión primero.';
+    if (!allowed()) return 'Con la nube activa, los trucos sólo están disponibles para la cuenta de administrador.';
     return '';
+  }
+
+  /** La cuenta ha usado trucos: sus marcas ya no suben al ranking. */
+  function mark() {
+    const s = G.DB.save;
+    if (s && !s.cheated) { s.cheated = Date.now(); G.DB.commit(true); }
   }
 
   const inRun = () => !!G.Game.player && G.Game.state !== 'ui' && G.Game.state !== 'over';
@@ -171,7 +200,10 @@ G.Cheats = (() => {
     const box = $('cht-body');
     const keep = box.scrollTop;
     const monQ = $('cht-mon') ? $('cht-mon').value : '';
-    const head = `<p class="sub">Sólo para pruebas. Los cambios se guardan en este navegador${G.DB.guest ? ' (como invitado no se guarda nada)' : ''}.</p>`
+    const head = `<p class="sub">${G.DB.guest ? 'Sólo para pruebas. Como invitado no se guarda nada.'
+        : G.DB.mode === 'cloud' ? 'Sólo para pruebas (cuenta de administrador). Los cambios se guardan en la nube.'
+        : 'Sólo para pruebas. Los cambios se guardan en este navegador.'}</p>`
+      + (G.DB.mode === 'cloud' && !G.DB.guest ? `<p class="sub">${s.cheated ? 'Esta cuenta ha usado trucos: sus marcas ya no suben al ranking.' : 'Si usas cualquier truco, las marcas de esta cuenta dejarán de subir al ranking para siempre.'}</p>` : '')
       + `<p class="cht-bal"><span class="coin"></span> <b>${s.coins.toLocaleString('es')}</b> &nbsp; ${G.Icons.html('ticket', 16)} <b>${t.t1}</b> &nbsp; ${G.Icons.html('ticket10', 16)} <b>${t.t10}</b></p>`;
     const meta = h('Monedas y tickets')
       + row('Pokémonedas', '', btn('c:1000', '+1.000') + btn('c:10000', '+10.000') + btn('c:100000', '+100.000', 'gold'))
@@ -218,6 +250,7 @@ G.Cheats = (() => {
   function act(a) {
     const why = blockedReason();
     if (why) { G.UI.toast(why, 3500); close(); return; }
+    mark();
     const [k, v] = a.split(':');
     if (k === 'c' || k === 't1' || k === 't10') return addCur(k, +v);
     if (k === 'set') return setCur(v, $('cht-num').value);
@@ -273,9 +306,9 @@ G.Cheats = (() => {
   }
 
   return {
-    init, open, close, toggle,
+    init, open, close, toggle, isAdmin,
     get isOpen() { return isOpen(); },
-    /** Invencible (nunca en la nube ni en cooperativo). */
-    get god() { return god && G.DB.mode !== 'cloud' && !(G.Coop && G.Coop.active); }
+    /** Invencible (en la nube sólo la cuenta de administrador; nunca en cooperativo). */
+    get god() { return god && allowed(); }
   };
 })();
