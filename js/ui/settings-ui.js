@@ -8,6 +8,7 @@ G.SettingsUI = (() => {
   const esc = s => String(s).replace(/[&<>"']/g, c => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[c]));
   const VERSION = '1.2 · 2026-10-09';
   const REPO = 'https://github.com/JPTER78/pokesurvivor';
+  const OFFICIAL = 'https://pokesurvivor.com/';
   let tab = 'sound';
 
   function init() {
@@ -105,9 +106,12 @@ G.SettingsUI = (() => {
       renderAccount(box);
     } else {
       box.innerHTML = `<div class="about-logo">PokéSurvivor</div><p class="sub center">Versión ${esc(VERSION)}</p>`
+        + `<p class="fork-note">Versión no oficial modificada por fans: las cuentas, el ranking y las partidas están separados del PokéSurvivor oficial.</p>`
+        + `<p class="sub">El juego original es de JPTER78 y el oficial está en pokesurvivor.com. Esta versión no oficial también es gratis: si alguien te pide pagar, es un engaño.</p>`
         + `<p class="sub">Juego de fans <b>gratuito y sin ánimo de lucro</b>: sin anuncios ni compras. Pokémon y sus personajes son propiedad de Nintendo, Creatures y GAME FREAK; este proyecto no está afiliado a ellos.</p>`
         + section('Créditos')
         + `<ul class="credits">
+             <li><b>Juego original:</b> JPTER78 (Copyright 2026 JPTER78, PolyForm Noncommercial 1.0.0).</li>
              <li><b>Sprites:</b> PMD SpriteCollab y sus artistas (CC BY-NC 4.0).</li>
              <li><b>Datos de los Pokémon:</b> PokéAPI.</li>
              <li><b>Música y sonidos:</b> originales, generados por el propio juego.</li>
@@ -117,8 +121,8 @@ G.SettingsUI = (() => {
              ${window.PS_PAGES ? `<a class="btn small" href="${G.I18n.lang !== 'es' ? 'en/guide/' : 'guia/'}" target="_blank">Guía y preguntas</a>
              <a class="btn small" href="${G.I18n.lang !== 'es' ? 'en/pokedex/' : 'pokedex/'}" target="_blank">Pokédex</a>` : ''}
              <button class="btn small" data-legal>Aviso legal y privacidad</button>
-             <a class="btn small" href="contacto/" target="_blank" rel="noopener">Contacto</a>
-             <a class="btn small" href="${REPO}" target="_blank" rel="noopener">Código (GitHub)</a>
+             <a class="btn small" href="${OFFICIAL}" target="_blank" rel="noopener">Juego oficial</a>
+             <a class="btn small" href="${REPO}" target="_blank" rel="noopener">Código original (GitHub)</a>
            </div>`;
     }
     wire(box);

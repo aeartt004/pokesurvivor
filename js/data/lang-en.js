@@ -624,3 +624,37 @@ G.I18n.add({
   'Ya hay una grieta abierta': 'A rift is already open', 'Grieta abierta cerca': 'Rift opened nearby', 'Ahora no se puede': "You can't do that right now",
   'Arena del legendario': 'Legendary arena', 'El próximo salvaje sale shiny': 'The next wild one will be shiny', 'Velocidad ×{x}': 'Speed ×{x}'
 });
+
+// Versión no oficial (fork): avisos de que no es el juego oficial.
+G.I18n.add({
+  'PokéSurvivor (versión no oficial)': 'PokéSurvivor (unofficial version)',
+  'Versión no oficial modificada por fans: las cuentas, el ranking y las partidas están separados del PokéSurvivor oficial.': 'Unofficial fan-modified version: accounts, leaderboard and saves are separate from the official PokéSurvivor.',
+  'El juego oficial está en pokesurvivor.com. Esta versión no oficial también es gratis: si alguien te pide pagar, es un engaño.': 'The official game is at pokesurvivor.com. This unofficial version is also free: if anyone asks you to pay, it is a scam.',
+  'Versión no oficial · cuentas y ranking separados del oficial': 'Unofficial version · accounts and leaderboard separate from the official game',
+  'Versión no oficial modificada por fans': 'Unofficial fan-modified version',
+  'Ranking del servidor no oficial: sólo jugadores de esta versión. No es el ranking del PokéSurvivor oficial.': 'Unofficial server leaderboard: only players of this version. This is not the official PokéSurvivor leaderboard.',
+  'Versión no oficial · Proyecto de fan sin ánimo de lucro · Sprites: SpriteCollab (CC BY-NC 4.0) · Pokémon © Nintendo/Creatures/GAME FREAK ·': 'Unofficial version · Non-profit fan project · Sprites: SpriteCollab (CC BY-NC 4.0) · Pokémon © Nintendo/Creatures/GAME FREAK ·',
+  'Apoyar al autor original': 'Support the original author',
+  'Esta es una versión no oficial: no acepta donaciones ni pagos.': 'This is an unofficial version: it does not accept donations or payments.',
+  'PokéSurvivor es obra de JPTER78. Si quieres apoyar el juego, puedes hacer una donación voluntaria a su autor original. Ese dinero va al autor original, no a esta versión.': 'PokéSurvivor is made by JPTER78. If you want to support the game, you can make a voluntary donation to its original author. That money goes to the original author, not to this version.',
+  'Donar no da ninguna ventaja en el juego.': 'Donating gives no advantage in the game.',
+  'Versión no oficial': 'Unofficial version',
+  'Esta es una versión no oficial y modificada de PokéSurvivor, publicada por un fan (aeartt004). No la hace ni la revisa el autor original.': 'This is an unofficial, modified version of PokéSurvivor, published by a fan (aeartt004). It is not made or reviewed by the original author.',
+  'Las cuentas, las partidas, el ranking, los amigos y el cooperativo de esta versión usan un servidor propio, separado del juego oficial: lo que hagas aquí no aparece en el PokéSurvivor oficial, y al revés.': 'This version\'s accounts, saves, leaderboard, friends and co-op use their own server, separate from the official game: what you do here does not appear in the official PokéSurvivor, and vice versa.',
+  'Autor original': 'Original author',
+  'PokéSurvivor es obra de JPTER78. Required Notice: Copyright 2026 JPTER78 (https://github.com/JPTER78/pokesurvivor).': 'PokéSurvivor is made by JPTER78. Required Notice: Copyright 2026 JPTER78 (https://github.com/JPTER78/pokesurvivor).',
+  'Juego oficial:': 'Official game:', 'Código original:': 'Original code:', 'Juego oficial': 'Official game',
+  'Las donaciones de Ko-fi y GitHub Sponsors van al autor original (JPTER78), no a esta versión:': 'Ko-fi and GitHub Sponsors donations go to the original author (JPTER78), not to this version:',
+  'PokéSurvivor es un juego hecho por fans, gratuito y sin ánimo de lucro. No tiene anuncios ni compras.': 'PokéSurvivor is a free, non-profit fan-made game. It has no ads or purchases.',
+  'Si eres titular de derechos y quieres que se retire algo de esta versión no oficial, escribe a quien la mantiene y se quitará lo antes posible:': 'If you are a rights holder and want something removed from this unofficial version, contact its maintainer and it will be removed as soon as possible:',
+  'Código fuente original:': 'Original source code:',
+  'El juego original es de JPTER78 y el oficial está en pokesurvivor.com. Esta versión no oficial también es gratis: si alguien te pide pagar, es un engaño.': 'The original game is by JPTER78 and the official one is at pokesurvivor.com. This unofficial version is also free: if anyone asks you to pay, it is a scam.',
+  'Juego original:': 'Original game:',
+  'JPTER78 (Copyright 2026 JPTER78, PolyForm Noncommercial 1.0.0).': 'JPTER78 (Copyright 2026 JPTER78, PolyForm Noncommercial 1.0.0).',
+  'Código original (GitHub)': 'Original code (GitHub)',
+  'Con la nube activa, los trucos sólo están disponibles para la cuenta de administrador.': 'With the cloud active, cheats are only available to the admin account.',
+  'Sólo para pruebas. Como invitado no se guarda nada.': 'For testing only. Nothing is saved as a guest.',
+  'Sólo para pruebas (cuenta de administrador). Los cambios se guardan en la nube.': 'For testing only (admin account). Changes are saved to the cloud.',
+  'Esta cuenta ha usado trucos: sus marcas ya no suben al ranking.': 'This account has used cheats: its records are no longer sent to the leaderboard.',
+  'Si usas cualquier truco, las marcas de esta cuenta dejarán de subir al ranking para siempre.': 'If you use any cheat, this account\'s records will never be sent to the leaderboard again.'
+});

@@ -7,6 +7,18 @@
  * como tercer texto; si no está, en chino se enseña la inglesa).
  */
 G.CHANGELOG = [
+  { d: '2026-10-18', title: ['Versión no oficial con servidor propio', 'Unofficial version with its own server', '使用獨立伺服器的非官方版本'], new: [
+    ['Esta es una versión no oficial modificada por fans. Usa su propio servidor: las cuentas, las partidas, el ranking, los amigos y el cooperativo están separados del PokéSurvivor oficial (pokesurvivor.com, de JPTER78). Lo verás en la pantalla de inicio, al entrar, en el ranking y en el Aviso legal.',
+     'This is an unofficial fan-modified version. It uses its own server: accounts, saves, leaderboard, friends and co-op are separate from the official PokéSurvivor (pokesurvivor.com, by JPTER78). You will see this on the start screen, when signing in, on the leaderboard and in the Legal notice.',
+     '這是由粉絲修改的非官方版本，使用獨立的伺服器：帳號、遊戲紀錄、排行榜、好友與合作模式都與官方 PokéSurvivor（pokesurvivor.com，JPTER78 製作）分開。開始畫面、登入畫面、排行榜和法律聲明中都會顯示這項說明。']
+  ], chg: [
+    ['El botón "Apoyar" lleva a las donaciones del autor original (JPTER78): esta versión no acepta dinero.',
+     'The "Support" button leads to the original author’s donations (JPTER78): this version does not accept money.',
+     '「支持」按鈕會連到原作者（JPTER78）的贊助頁面：本版本不接受任何款項。'],
+    ['Menú de trucos: con la nube activa sólo lo puede abrir la cuenta de administrador. Una cuenta que use trucos ya no sube marcas al ranking.',
+     'Cheat menu: with the cloud active, only the admin account can open it. An account that uses cheats no longer sends records to the leaderboard.',
+     '金手指選單：雲端模式下只有管理員帳號能開啟。使用過金手指的帳號不會再上傳紀錄到排行榜。']
+  ] },
   { d: '2026-10-18', title: ['Menú de trucos para pruebas', 'Cheat menu for testing', '測試用金手指選單'], new: [
     ['Menú de trucos (sólo en modo local, sin nube): ábrelo con F8 o en Ajustes > Trucos (también en el móvil, desde la pausa). Da monedas y tickets, desbloquea Pokémon y shinies, completa misiones y logros, y en la partida: invencible, curar, subir de nivel, jefes, grietas, saltar tiempo y velocidad. Las partidas con trucos no suben al ranking.',
      'Cheat menu (local mode only, no cloud): open it with F8 or in Settings > Cheats (also on mobile, from the pause menu). Gives coins and tickets, unlocks Pokémon and shinies, completes missions and achievements, and in a run: invincibility, heal, level up, bosses, rifts, skip time and speed. Runs with cheats are not sent to the leaderboard.',

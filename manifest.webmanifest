@@ -1,7 +1,7 @@
 {
-  "name": "PokéSurvivor",
+  "name": "PokéSurvivor (versión no oficial)",
   "short_name": "PokéSurvivor",
-  "description": "Fan game gratuito: sobrevive a las hordas con tu compañero Pokémon. Sin anuncios.",
+  "description": "Versión no oficial modificada por fans de PokéSurvivor (el original es de JPTER78, en pokesurvivor.com). Cuentas y ranking separados del oficial. Gratis, sin anuncios.",
   "lang": "es",
   "start_url": "./",
   "scope": "./",

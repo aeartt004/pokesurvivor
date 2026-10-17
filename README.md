@@ -1,5 +1,19 @@
 # PokéSurvivor · Mundo Misterioso
 
+> **Versión no oficial / Unofficial version / 非官方版本**
+>
+> Este repositorio es una versión **no oficial** modificada por un fan (aeartt004).
+> El juego original es de **JPTER78**: <https://pokesurvivor.com/> ·
+> <https://github.com/JPTER78/pokesurvivor> (Required Notice: Copyright 2026 JPTER78).
+> Usa su propio proyecto de Firebase (`pokesurvivor-aeartt`): las cuentas, las
+> partidas y el ranking están separados del juego oficial. No genera páginas para
+> buscadores ni usa el dominio pokesurvivor.com.
+>
+> This is an **unofficial** fan-modified version. The original game is by JPTER78.
+> Accounts, saves and leaderboard use a separate server from the official game.
+>
+> 本版本為非官方修改版，帳號、排行榜與遊戲紀錄皆與官方 PokéSurvivor 分開。原作者為 JPTER78。
+
 Bullet-heaven con Pokémon al estilo de Survivor.io y Megabonk, con sprites de
 *Pokémon Mundo Misterioso*, capa roguelike, **966 Pokémon de las 9 generaciones**,
 shinies y gacha por región. Música y efectos compuestos para el juego.

@@ -1,4 +1,7 @@
-/* ============ funding.js — donaciones ============
+/* ============ funding.js — donaciones (al AUTOR ORIGINAL) ============
+ * Versión no oficial: esta versión no recoge dinero. El botón "Apoyar" lleva
+ * a las donaciones del autor original de PokéSurvivor (JPTER78), bien
+ * señaladas como suyas (js/ui/support-ui.js).
  * Las donaciones son voluntarias, no dan ninguna ventaja en el juego y se
  * usan sólo para mantenerlo en línea: servidores y dominio.
  * Este archivo es la fuente de lo que se enseña en el juego (botón "Apoyar")

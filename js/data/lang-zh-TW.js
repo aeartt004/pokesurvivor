@@ -632,3 +632,37 @@ G.I18n.add({
   'Ya hay una grieta abierta': '已經有裂縫開著了', 'Grieta abierta cerca': '附近出現了裂縫', 'Ahora no se puede': '現在無法使用',
   'Arena del legendario': '傳說寶可夢競技場', 'El próximo salvaje sale shiny': '下一隻野生寶可夢會是異色', 'Velocidad ×{x}': '速度 ×{x}',
 }, 'zh-TW');
+
+// 非官方版本（fork）：提醒玩家這不是官方遊戲。
+G.I18n.add({
+  'PokéSurvivor (versión no oficial)': 'PokéSurvivor（非官方版本）',
+  'Versión no oficial modificada por fans: las cuentas, el ranking y las partidas están separados del PokéSurvivor oficial.': '本版本為非官方修改版，帳號、排行榜與遊戲紀錄皆與官方 PokéSurvivor 分開。',
+  'El juego oficial está en pokesurvivor.com. Esta versión no oficial también es gratis: si alguien te pide pagar, es un engaño.': '官方遊戲位於 pokesurvivor.com。本非官方版本同樣免費：如果有人要你付費，那是詐騙。',
+  'Versión no oficial · cuentas y ranking separados del oficial': '非官方版本 · 帳號與排行榜皆與官方分開',
+  'Versión no oficial modificada por fans': '非官方粉絲修改版',
+  'Ranking del servidor no oficial: sólo jugadores de esta versión. No es el ranking del PokéSurvivor oficial.': '非官方伺服器排行榜：只包含本版本的玩家，並非官方 PokéSurvivor 的排行榜。',
+  'Versión no oficial · Proyecto de fan sin ánimo de lucro · Sprites: SpriteCollab (CC BY-NC 4.0) · Pokémon © Nintendo/Creatures/GAME FREAK ·': '非官方版本 · 非營利粉絲專案 · 圖像：SpriteCollab (CC BY-NC 4.0) · Pokémon © Nintendo/Creatures/GAME FREAK ·',
+  'Apoyar al autor original': '支持原作者',
+  'Esta es una versión no oficial: no acepta donaciones ni pagos.': '這是非官方版本：不接受任何贊助或付款。',
+  'PokéSurvivor es obra de JPTER78. Si quieres apoyar el juego, puedes hacer una donación voluntaria a su autor original. Ese dinero va al autor original, no a esta versión.': 'PokéSurvivor 是 JPTER78 的作品。如果你想支持這款遊戲，可以自願贊助原作者。這些款項會交給原作者，而不是本版本。',
+  'Donar no da ninguna ventaja en el juego.': '贊助不會帶來任何遊戲內優勢。',
+  'Versión no oficial': '非官方版本',
+  'Esta es una versión no oficial y modificada de PokéSurvivor, publicada por un fan (aeartt004). No la hace ni la revisa el autor original.': '這是由粉絲（aeartt004）發布的 PokéSurvivor 非官方修改版，並非由原作者製作或審核。',
+  'Las cuentas, las partidas, el ranking, los amigos y el cooperativo de esta versión usan un servidor propio, separado del juego oficial: lo que hagas aquí no aparece en el PokéSurvivor oficial, y al revés.': '本版本的帳號、遊戲紀錄、排行榜、好友與合作模式使用獨立的伺服器，與官方遊戲分開：你在這裡的紀錄不會出現在官方 PokéSurvivor 中，反之亦然。',
+  'Autor original': '原作者',
+  'PokéSurvivor es obra de JPTER78. Required Notice: Copyright 2026 JPTER78 (https://github.com/JPTER78/pokesurvivor).': 'PokéSurvivor 是 JPTER78 的作品。Required Notice: Copyright 2026 JPTER78 (https://github.com/JPTER78/pokesurvivor).',
+  'Juego oficial:': '官方遊戲：', 'Código original:': '原始程式碼：', 'Juego oficial': '官方遊戲',
+  'Las donaciones de Ko-fi y GitHub Sponsors van al autor original (JPTER78), no a esta versión:': 'Ko-fi 與 GitHub Sponsors 的贊助會交給原作者（JPTER78），而不是本版本：',
+  'PokéSurvivor es un juego hecho por fans, gratuito y sin ánimo de lucro. No tiene anuncios ni compras.': 'PokéSurvivor 是由粉絲製作的免費非營利遊戲，沒有廣告也沒有內購。',
+  'Si eres titular de derechos y quieres que se retire algo de esta versión no oficial, escribe a quien la mantiene y se quitará lo antes posible:': '如果你是權利人並希望從本非官方版本移除某些內容，請聯絡本版本的維護者，會盡快處理：',
+  'Código fuente original:': '原始程式碼（原作者）：',
+  'El juego original es de JPTER78 y el oficial está en pokesurvivor.com. Esta versión no oficial también es gratis: si alguien te pide pagar, es un engaño.': '原作遊戲由 JPTER78 製作，官方版本位於 pokesurvivor.com。本非官方版本同樣免費：如果有人要你付費，那是詐騙。',
+  'Juego original:': '原作遊戲：',
+  'JPTER78 (Copyright 2026 JPTER78, PolyForm Noncommercial 1.0.0).': 'JPTER78（Copyright 2026 JPTER78，PolyForm Noncommercial 1.0.0）。',
+  'Código original (GitHub)': '原作原始碼（GitHub）',
+  'Con la nube activa, los trucos sólo están disponibles para la cuenta de administrador.': '雲端模式下，作弊選單只開放給管理員帳號。',
+  'Sólo para pruebas. Como invitado no se guarda nada.': '僅供測試使用。訪客模式不會儲存任何資料。',
+  'Sólo para pruebas (cuenta de administrador). Los cambios se guardan en la nube.': '僅供測試使用（管理員帳號）。變更會儲存到雲端。',
+  'Esta cuenta ha usado trucos: sus marcas ya no suben al ranking.': '此帳號已使用過作弊：之後的紀錄不會再上傳到排行榜。',
+  'Si usas cualquier truco, las marcas de esta cuenta dejarán de subir al ranking para siempre.': '只要使用任何作弊，此帳號的紀錄將永遠不會再上傳到排行榜。'
+}, 'zh-TW');
