@@ -5,7 +5,14 @@
 #   es: guia/ pokedex/ legendarios/ shinies/ tipos/ movimientos/ objetos/ logros/ novedades/
 #   en: en/ (el juego en inglés) en/guide/ en/pokedex/ en/legendaries/ ... en/news/
 #   404.html, robots.txt, sitemap.xml (con las versiones de cada idioma)
-import json, os, re, datetime, html
+import json, os, re, datetime, html, sys
+
+# Versión no oficial (fork): NO se generan páginas para buscadores. Hablan del
+# juego como si fuera la web oficial (pokesurvivor.com) y podrían confundir.
+FORK = True
+if FORK:
+    print('Versión no oficial: no se generan páginas para buscadores (FORK = True en tools/make_seo_pages.py).')
+    sys.exit(0)
 
 ROOT = os.path.join(os.path.dirname(__file__), '..')
 SITE = 'https://pokesurvivor.com/'

@@ -38,27 +38,32 @@ fs.writeFileSync(tmp, joined);
 const outJs = path.join(ROOT, 'js', 'app.min.js');
 const npx = process.platform === 'win32' ? 'npx.cmd' : 'npx';
 const shell = process.platform === 'win32';
-execFileSync(npx, ['--yes', 'terser@5', tmp, '--compress', 'passes=1', '--mangle', '--comments', 'false', '--ecma', '2020', '-o', outJs],
+// Con shell (Windows) los argumentos se unen en una línea: las rutas con espacios van entre comillas.
+const q = args => shell ? args.map(a => /[\s&()^]/.test(a) ? `"${a}"` : a) : args;
+execFileSync(npx, q(['--yes', 'terser@5', tmp, '--compress', 'passes=1', '--mangle', '--comments', 'false', '--ecma', '2020', '-o', outJs]),
   { stdio: 'inherit', shell });
 // Y ofuscado: el código queda ilegible y se rompe solo si lo reformatean para
 // tocarlo. Las cadenas, en una tabla codificada (sólo una parte, para no frenar
 // el juego). Semilla fija: el mismo código da siempre el mismo archivo.
 if (!EXPOSE) {
-  execFileSync(npx, ['--yes', 'javascript-obfuscator@4.1.1', outJs, '--output', outJs,
+  execFileSync(npx, q(['--yes', 'javascript-obfuscator@4.1.1', outJs, '--output', outJs,
     '--compact', 'true', '--self-defending', 'true', '--seed', '7',
     '--string-array', 'true', '--string-array-encoding', 'base64', '--string-array-threshold', '0.1',
     '--identifier-names-generator', 'hexadecimal', '--rename-globals', 'false', '--transform-object-keys', 'false',
     '--split-strings', 'false', '--control-flow-flattening', 'false', '--dead-code-injection', 'false',
-    '--unicode-escape-sequence', 'false', '--target', 'browser'], { stdio: 'inherit', shell });
+    '--unicode-escape-sequence', 'false', '--target', 'browser']), { stdio: 'inherit', shell });
 }
 const min = fs.readFileSync(outJs);
 const hash = crypto.createHash('sha1').update(min).digest('hex').slice(0, 10);
 
 let html = dev.slice(0, i) + `<script defer src="js/app.min.js?v=${hash}"></script>` + dev.slice(j + END.length);
-html = html.replace(/<meta name="robots" content="noindex">\s*/, '');
+// Versión no oficial (fork): siempre sin SEO y con "noindex", para que los
+// buscadores no la confundan con el juego oficial (pokesurvivor.com).
+const FORK = true;
+if (!FORK) html = html.replace(/<meta name="robots" content="noindex">\s*/, '');
 // --sin-seo: sin canonical/redes/datos estructurados ni enlaces a las páginas
 // (para publicar antes de tener el dominio pokesurvivor.com).
-const SIN_SEO = process.argv.includes('--sin-seo');
+const SIN_SEO = FORK || process.argv.includes('--sin-seo');
 html = SIN_SEO ? html.replace(/<!-- seo:begin -->[\s\S]*?<!-- seo:end -->\n?/g, '') : html.replace(/<!-- seo:(begin|end) -->\n?/g, '');
 html = html.replace(/<!-- dev.html: página fuente[^>]*-->/, '<!-- GENERADO desde dev.html por tools/build.js: no editar a mano (se edita dev.html). -->');
 fs.writeFileSync(OUT, html);

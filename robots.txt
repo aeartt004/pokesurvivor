@@ -1,8 +1,4 @@
-# PokéSurvivor
+# PokéSurvivor (versión no oficial)
+# Versión no oficial: no se indexa, para no confundirla con el juego oficial (pokesurvivor.com).
 User-agent: *
-Allow: /
-Disallow: /tools/
-Disallow: /docs/
-Disallow: /dev.html
-
-Sitemap: https://pokesurvivor.com/sitemap.xml
+Disallow: /
