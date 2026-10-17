@@ -3,9 +3,15 @@
  * de juego y fallos arreglados (nada de servidores ni bases de datos).
  * La fecha más nueva, arriba. En cada fecha, por apartados:
  *   new  lo nuevo · chg  cambios y ajustes · fix  fallos arreglados
- * Cada línea en español y en inglés.
+ * Cada línea en español y en inglés (y, si se quiere, en chino tradicional
+ * como tercer texto; si no está, en chino se enseña la inglesa).
  */
 G.CHANGELOG = [
+  { d: '2026-10-18', title: ['Nuevo idioma: chino tradicional', 'New language: Traditional Chinese', '新語言：繁體中文'], new: [
+    ['El juego ya se puede jugar en chino tradicional (繁體中文): elígelo en Ajustes > Idioma. Tipos, movimientos, objetos, regiones y los 966 Pokémon usan sus nombres oficiales, con una fuente pixelada china (Cubic 11).',
+     'The game can now be played in Traditional Chinese (繁體中文): pick it in Settings > Language. Types, moves, items, regions and all 966 Pokémon use their official names, with a Chinese pixel font (Cubic 11).',
+     '遊戲現在支援繁體中文：可在「設定 > 語言」中選擇。屬性、招式、道具、地區和全部 966 隻寶可夢都使用官方譯名，並搭配中文像素字型（俐方體11號）。']
+  ] },
   { d: '2026-10-15', title: ['Actualizaciones obligatorias', 'Required updates'], chg: [
     ['Cuando una actualización sea obligatoria (por ejemplo, para arreglar un fallo importante), la partida en curso se termina tras un aviso de 10 s y el juego se recarga. No pierdes nada: las monedas, los tickets, los récords y el ranking de esa partida se guardan como al abandonarla.',
      'When an update is required (for example, to fix an important bug), your current run ends after a 10 s notice and the game reloads. You lose nothing: that run’s coins, tickets, records and leaderboard entry are saved as if you had quit.']
