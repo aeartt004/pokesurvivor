@@ -485,7 +485,7 @@ G.Player = class Player {
     }
     if (this.tag) {
       ctx.save();
-      ctx.font = '700 7px Pixelify,"Segoe UI",sans-serif';
+      ctx.font = '700 7px Pixelify,"Segoe UI","Microsoft JhengHei","PingFang TC","Noto Sans TC",sans-serif';
       ctx.textAlign = 'center';
       const y = this.y - this.bodyH - 8;
       ctx.lineWidth = 2.5; ctx.strokeStyle = 'rgba(0,0,0,.75)';
@@ -493,7 +493,7 @@ G.Player = class Player {
       ctx.fillStyle = this.dead ? '#ff8a96' : this.tagColor || '#fff';
       ctx.fillText(this.tag, this.x, y);
       if (this.dead) {
-        ctx.font = '700 6px Pixelify,"Segoe UI",sans-serif';
+        ctx.font = '700 6px Pixelify,"Segoe UI","Microsoft JhengHei","PingFang TC","Noto Sans TC",sans-serif';
         ctx.strokeText(this.revLabel || '', this.x, y - 8);
         ctx.fillText(this.revLabel || '', this.x, y - 8);
       }

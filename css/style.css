@@ -15,6 +15,25 @@
   font-weight: 551 900;
   font-display: block;
 }
+/* Caracteres chinos (繁體中文): Cubic 11 / 俐方體11號 (pixel, licencia libre,
+ * assets/fonts/Cubic11-LICENSE.txt) dentro de la misma familia 'Pixelify', así
+ * sirve en el CSS y en todos los textos del canvas sin cambiar nada. Sólo se
+ * descarga si en pantalla sale algún carácter chino (unicode-range). Mismos
+ * pesos que las de arriba para que el navegador las junte en una sola familia. */
+@font-face {
+  font-family: 'Pixelify';
+  src: url('../assets/fonts/Cubic11.woff2') format('woff2');
+  font-weight: 400 550;
+  font-display: swap;
+  unicode-range: U+2E80-2FFF, U+3000-33FF, U+3400-4DBF, U+4E00-9FFF, U+F900-FAFF, U+FE30-FE4F, U+FF00-FFEF;
+}
+@font-face {
+  font-family: 'Pixelify';
+  src: url('../assets/fonts/Cubic11.woff2') format('woff2');
+  font-weight: 551 900;
+  font-display: swap;
+  unicode-range: U+2E80-2FFF, U+3000-33FF, U+3400-4DBF, U+4E00-9FFF, U+F900-FAFF, U+FE30-FE4F, U+FF00-FFEF;
+}
 
 :root {
   --ink: #ffffff;
@@ -30,7 +49,7 @@
   --green: #5fe08a;
   --shadow: #0a1430;
   --r1: #9fb1c9; --r2: #5fe08a; --r3: #4fb4ff; --r4: #c47bff; --r5: #ffcb3d;
-  --font: 'Pixelify', 'Segoe UI', system-ui, sans-serif;
+  --font: 'Pixelify', 'Segoe UI', 'Microsoft JhengHei', 'PingFang TC', 'Noto Sans TC', system-ui, sans-serif;
 }
 
 * { box-sizing: border-box; }

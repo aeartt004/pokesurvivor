@@ -2,7 +2,7 @@
  * Se dibuja en coordenadas de PANTALLA (sin la transformación de cámara).
  */
 G.HUD = (() => {
-  const F = (w, s) => `${w} ${s}px Pixelify,"Segoe UI",system-ui,sans-serif`;
+  const F = (w, s) => `${w} ${s}px Pixelify,"Segoe UI","Microsoft JhengHei","PingFang TC","Noto Sans TC",system-ui,sans-serif`;
 
   function roundRect(ctx, x, y, w, h, r) {
     ctx.beginPath();

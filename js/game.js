@@ -771,7 +771,7 @@ G.Game = (() => {
     G.Touch.draw(ctx);
     if (G.Settings.get('fps')) {
       ctx.save();
-      ctx.font = '700 11px Pixelify, monospace';
+      ctx.font = '700 11px Pixelify,"Microsoft JhengHei","PingFang TC","Noto Sans TC",monospace';
       ctx.textAlign = 'right';
       ctx.fillStyle = fpsShown >= 50 ? '#5fe08a' : fpsShown >= 30 ? '#ffd23f' : '#ff5f6d';
       ctx.fillText(fpsShown + ' FPS', w - 10, h - 8);

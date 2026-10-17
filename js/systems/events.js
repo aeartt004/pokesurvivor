@@ -284,7 +284,7 @@ G.Events = (() => {
           // "!" que bota encima: está esperando a que lo toques.
           const by = L.y - h - 14 - Math.abs(Math.sin(now * 5)) * 6;
           ctx.save();
-          ctx.font = '700 16px Pixelify, monospace'; ctx.textAlign = 'center';
+          ctx.font = '700 16px Pixelify,"Microsoft JhengHei","PingFang TC","Noto Sans TC",monospace'; ctx.textAlign = 'center';
           ctx.lineWidth = 4; ctx.strokeStyle = '#000'; ctx.strokeText('!', L.x, by);
           ctx.fillStyle = '#7dffb0'; ctx.fillText('!', L.x, by);
           ctx.restore();
