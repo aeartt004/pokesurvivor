@@ -20,17 +20,21 @@ G.NewsUI = (() => {
 
   function fmt(d) {
     const [y, m, day] = d.split('-').map(Number);
-    return new Date(y, m - 1, day).toLocaleDateString(G.I18n.lang === 'en' ? 'en-GB' : 'es-ES', { day: 'numeric', month: 'long', year: 'numeric' });
+    const loc = { en: 'en-GB', 'zh-TW': 'zh-TW' }[G.I18n.lang] || 'es-ES';
+    return new Date(y, m - 1, day).toLocaleDateString(loc, { day: 'numeric', month: 'long', year: 'numeric' });
   }
 
   function open() {
-    const en = G.I18n.lang === 'en' ? 1 : 0;
+    // Cada línea va en español e inglés, y a veces en chino (3.er texto); si no lo hay, en chino sale en inglés.
+    const en = G.I18n.lang === 'es' ? 0 : 1;
+    const zh = G.I18n.lang === 'zh-TW';
+    const pick = a => (zh && a[2]) || a[en];
     // Cada texto ya va en su idioma: translate="no" para que no lo toque i18n.
-    const PARTS = [['new', ['Nuevo', 'New']], ['chg', ['Cambios', 'Changes']], ['fix', ['Arreglos', 'Fixes']]];
+    const PARTS = [['new', ['Nuevo', 'New', '新內容']], ['chg', ['Cambios', 'Changes', '調整']], ['fix', ['Arreglos', 'Fixes', '修正']]];
     $('news-body').innerHTML = G.CHANGELOG.map(v =>
-      `<div class="news-day" translate="no"><h3>${esc(v.title ? v.title[en] : '')}<small>${fmt(v.d)}</small></h3>` +
+      `<div class="news-day" translate="no"><h3>${esc(v.title ? pick(v.title) : '')}<small>${fmt(v.d)}</small></h3>` +
       PARTS.filter(([k]) => v[k] && v[k].length).map(([k, lbl]) =>
-        `<div class="news-part"><span class="news-tag ${k}">${lbl[en]}</span><ul>${v[k].map(t => `<li>${esc(t[en])}</li>`).join('')}</ul></div>`).join('') +
+        `<div class="news-part"><span class="news-tag ${k}">${lbl[zh ? 2 : en]}</span><ul>${v[k].map(t => `<li>${esc(pick(t))}</li>`).join('')}</ul></div>`).join('') +
       '</div>').join('');
     $('news-body').scrollTop = 0;
     $('scr-news').classList.remove('hidden');

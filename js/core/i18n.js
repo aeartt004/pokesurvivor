@@ -1,7 +1,7 @@
-/* ============ i18n.js — idiomas (español / inglés) ============
- * El juego está escrito en español. Si el idioma es inglés, todo texto que
- * se enseña se traduce con el diccionario de js/data/lang-en.js, sin tener que
- * tocar cada pantalla:
+/* ============ i18n.js — idiomas (español / inglés / chino tradicional) ============
+ * El juego está escrito en español. Si el idioma es otro, todo texto que
+ * se enseña se traduce con su diccionario (js/data/lang-en.js,
+ * js/data/lang-zh-TW.js + lang-zh-TW-dex.js), sin tener que tocar cada pantalla:
  *   - el DOM (menús, cartas, avisos...) con un MutationObserver,
  *   - el canvas (HUD, avisos, números) envolviendo fillText/strokeText,
  *   - confirm()/alert().
@@ -14,15 +14,17 @@
  * Lo que escriben los jugadores (apodos) va marcado con translate="no".
  *
  * Idioma: el elegido en Ajustes; si no, /en/ en la dirección o el del navegador
- * (español si el navegador está en español, inglés en cualquier otro caso).
+ * (español si el navegador está en español, chino tradicional si está en chino,
+ * inglés en cualquier otro caso). Mismo cálculo en el script de arranque de dev.html.
  */
 G.I18n = (() => {
   const KEY = 'ps.lang';
+  const LANGS = ['es', 'en', 'zh-TW'];
   let saved = null;
   try { saved = localStorage.getItem(KEY); } catch (e) { /* nada */ }
   const byPath = /\/en(\/|$)/.test(location.pathname) ? 'en' : null;
   const nav = ((navigator.languages && navigator.languages[0]) || navigator.language || 'es').toLowerCase();
-  const lang = saved === 'es' || saved === 'en' ? saved : byPath || (nav.startsWith('es') ? 'es' : 'en');
+  const lang = LANGS.includes(saved) ? saved : byPath || (nav.startsWith('es') ? 'es' : nav.startsWith('zh') ? 'zh-TW' : 'en');
   document.documentElement.lang = lang;
 
   const exact = new Map(), exactLow = new Map();
@@ -31,8 +33,10 @@ G.I18n = (() => {
   const L = '\\p{L}\\p{N}';
   const reEsc = s => s.replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
 
-  /** Añade traducciones { 'texto en español': 'English text' }. */
-  function add(dict) {
+  /** Añade traducciones { 'texto en español': 'texto traducido' } del idioma l
+   *  (por defecto inglés). Las de otro idioma que el actual se ignoran. */
+  function add(dict, l = 'en') {
+    if (l !== lang) return;
     const fr = [];
     for (const [es, en] of Object.entries(dict)) {
       if (!en || es === en) continue;

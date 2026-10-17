@@ -11,10 +11,11 @@ G.RankingUI = (() => {
 
   function init() {
     const dl = $('rk-dl');
-    dl.innerHTML = G.DEX.map(p => `<option value="${esc(p.name)}">`).join('');
+    // En otro idioma la lista enseña el nombre traducido; se busca por los dos.
+    dl.innerHTML = G.DEX.map(p => `<option value="${esc(G.T(p.name))}">`).join('');
     $('rk-poke').onchange = () => {
       const v = $('rk-poke').value.trim().toLowerCase();
-      const p = G.DEX.find(x => x.name.toLowerCase() === v);
+      const p = G.DEX.find(x => x.name.toLowerCase() === v || G.T(x.name).toLowerCase() === v);
       if (!v) { setDex(null); return; }
       if (!p) { G.UI.toast('No hay ningún Pokémon con ese nombre'); return; }
       setDex(p.dex);
@@ -88,10 +89,19 @@ G.RankingUI = (() => {
     rows.forEach((r, i) => list.appendChild(rowEl(r, i + 1, r.uids.includes(uid), b, done)));
 
     // La frase se monta en cada idioma (traducirla por trozos sale rara).
-    const en = G.I18n.lang === 'en';
+    const en = G.I18n.lang === 'en', zh = G.I18n.lang === 'zh-TW';
+    const mon = dex ? G.DEX_BY[dex].name : '';
+    if (zh) {
+      const zpn = { d: '今日', w: '本週', m: '本月', y: '今年', a: '歷來' }[period];
+      const zw = (dex ? '使用' + esc(G.T(mon)) : '') + (mode === 's' ? '單人' : '組隊');
+      $('rk-me').innerHTML = !G.Social.me ? 'Elige un apodo (en Amigos) para salir en el ranking.'
+        : me && me.out ? `<span translate="no">你尚未進入${zpn}${zw}前 50 名。你的確切名次請見「歷來」。</span>`
+        : me ? `<span translate="no">你${zpn}${zw}的最佳名次：<b class="gold">#${me.pos}</b> · ${fmt(me.t)}</span>`
+        : `<span translate="no">你還沒有${zpn}${zw}的紀錄。</span>`;
+      return;
+    }
     const pn = en ? { d: 'today', w: 'this week', m: 'this month', y: 'this year', a: 'of all time' }[period]
                   : { d: 'de hoy', w: 'de esta semana', m: 'de este mes', y: 'de este año', a: 'de siempre' }[period];
-    const mon = dex ? G.DEX_BY[dex].name : '';
     const where = en ? (mode === 's' ? 'solo' : 'group') + (dex ? ' with ' + mon : '')
                      : (mode === 's' ? 'en solitario' : 'en grupo') + (dex ? ' con ' + mon : '');
     $('rk-me').innerHTML = !G.Social.me ? 'Elige un apodo (en Amigos) para salir en el ranking.'

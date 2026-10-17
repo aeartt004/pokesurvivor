@@ -22,7 +22,7 @@
   const MAINTENANCE = false;
   function maintenance() {
     if (!MAINTENANCE || /[?&]dev\b/.test(location.search)) return false;
-    const en = typeof G === 'object' && G.I18n ? G.I18n.lang === 'en' : !/^es/i.test(navigator.language || '');
+    const en = typeof G === 'object' && G.I18n ? G.I18n.lang !== 'es' : !/^es/i.test(navigator.language || '');
     const el = document.getElementById('boot');
     el.setAttribute('translate', 'no');
     el.innerHTML = '<div class="boot-in"><h1>PokéSurvivor</h1>' + (en
@@ -38,8 +38,11 @@
     if (maintenance()) return;
     if (broken()) return;
     G.I18n.startDom();
-    // Espera a la fuente pixel para que la UI no salte al cargarla.
-    const ready = document.fonts && document.fonts.load ? document.fonts.load('16px Pixelify') : Promise.resolve();
+    // Espera a la fuente pixel para que la UI no salte al cargarla
+    // (en chino, también la de los caracteres chinos: Cubic 11, ver style.css).
+    const fl = (f, s) => document.fonts.load(f, s);
+    const ready = document.fonts && document.fonts.load
+      ? Promise.all([fl('16px Pixelify'), G.I18n.lang === 'zh-TW' ? fl('16px Pixelify', '寶可夢') : null]) : Promise.resolve();
     ready.catch(() => {}).then(() => G.Flow.boot());
   }
   if (document.readyState === 'loading') addEventListener('DOMContentLoaded', boot);
